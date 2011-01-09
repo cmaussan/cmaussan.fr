@@ -8,24 +8,37 @@
           href="desktop.css" media="only screen and (max-width: 480px)" />
     <link rel="stylesheet" type="text/css" 
           href="desktop.css" media="screen and (min-width: 481px)" />
-    <script type="text/javascript">
-
-        var _gaq = _gaq || [];
-        _gaq.push(['_setAccount', 'UA-117415-27']);
-        _gaq.push(['_trackPageview']);
-
-        ( function() {
-            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-        } )();
-
-    </script>
     <script type="text/javascript" src="jquery-1.4.4.min.js"></script>
-    <script type="text/javascript" src="jTwitter/jquery.jtwitter.min.js"></script>    
 
     <script type="text/javascript">
 
+        function parseRSS( xml ) {
+
+            $( xml ).find( 'item' ).each( function() {
+                var div = $( '<div></div>' );
+                div.append( 
+                    '<div class="title">'
+                        + '<a href="'
+                        + $( this ).find( 'link' ).text()
+                        +'">' 
+                        + $( this ).find( 'title' ).text()
+                        + '</a>'
+                        + '</div>'
+                );
+                $( "#external" ).append( div );
+            } );
+        }
+
+        $( document ).ready( function() {
+            $.ajax( { 
+                type: 'GET',
+                url: '/feed.php', 
+                dataType: 'xml',
+                success: parseRSS
+            } );
+        } );
+
+/*
         $( document ).ready( function() {
             $.jTwitter( 'cmaussan', 20, function( data ) {
                 $( '#tweets' ).empty();
@@ -57,7 +70,7 @@
                 });
             });
         });
-
+*/
     </script>
 
 </head>
@@ -79,8 +92,23 @@
     <p>
         I have some stuff on <a href="http://github.com/cmaussan">GitHub</a>.
     </p>
-    <p>And I <a href="http://twitter.com/cmaussan">tweet</a> (mostly in french) :</p>
-    <p id="tweets">
-    </p>
+    <p>And I <a href="http://twitter.com/cmaussan">tweet</a> (mostly in french).</p>
+
+    <div id="external"></div>
+
+    <script type="text/javascript">
+
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-117415-27']);
+        _gaq.push(['_trackPageview']);
+
+        ( function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        } )();
+
+    </script>
+
 </body>
 </html>
